@@ -4,5 +4,24 @@ Memcheck ist das wohl bekannteste Tool, das mit dem Valgrind-Framework ausgelief
 In großen Programmen kann es schnell vorkommen, dass einmal reservierte Speicherbereiche nicht mehr, oder nur in seltenen Ausnahmefällen nicht mehr frei gegeben werden. Diese Fehler können mit herkömmlichen Debuggern nur schwer bis gar nicht gefunden werden. Oft sind die Speicherlecks auch so klein, dass sie lediglich wenige Bytes pro Minute oder Stunde groß sind. Dies kann in vielen Anwendungen kein Problem sein, bei solchen allerdings, die Tagelang laufen, kann es sein, dass solche Lecks dafür sorgen, dass der benötigte Speicher den zur Verfügung stehenden Speicher überschreitet und es zu Performance-Verlust oder gar Fehlern kommt. Memchek kann in solchen fällen helfen die Ursachen für solche Lecks zu finden und zu beheben.
 
 \begin{lstlisting}
-	\include{../Examples/memcheck/memchek_example.c}
+	#include <stdlib.h>
+	#include <limits.h>
+	
+	void foo(void)
+	{
+	int* x = malloc (10*sizeof(int));
+	int y;
+	for(int i=0;i<=10;i++) 
+	{
+	y = x[i-1]; 			//problem 1 : read from not allocated memory
+	x[i]= y*2;  			//problem 2: heap block ovverrun.
+	}
+	
+	}								// problem 3 : memory leak -- x not freed
+	
+	int main(void)
+	{
+	foo();
+	return 0;
+	}
 \end{lstlisting}
