@@ -3,25 +3,53 @@ Memcheck ist das wohl bekannteste Tool, das mit dem Valgrind-Framework ausgelief
 
 In großen Programmen kann es schnell vorkommen, dass einmal reservierte Speicherbereiche nicht mehr, oder nur in seltenen Ausnahmefällen nicht mehr frei gegeben werden. Diese Fehler können mit herkömmlichen Debuggern nur schwer bis gar nicht gefunden werden. Oft sind die Speicherlecks auch so klein, dass sie lediglich wenige Bytes pro Minute oder Stunde groß sind. Dies kann in vielen Anwendungen kein Problem sein, bei solchen allerdings, die Tagelang laufen, kann es sein, dass solche Lecks dafür sorgen, dass der benötigte Speicher den zur Verfügung stehenden Speicher überschreitet und es zu Performance-Verlust oder gar Fehlern kommt. Memchek kann in solchen fällen helfen die Ursachen für solche Lecks zu finden und zu beheben.
 
-\begin{lstlisting}
-#include <stdlib.h>
-#include <limits.h>
+\subsection{Example}
+Das folgende Beispiel zeigt einige typische Fehler im Umgang mit Speicher und wie Memcheck sie ausgibt
 
-void foo(void)
-{
-	int* x = malloc (10*sizeof(int));
-	int y;
-	for(int i=0;i<=10;i++) 
-	{
-		y = x[i-1];	//problem 1 : read from not allocated memory
-		x[i]= y*2;	//problem 2: heap block ovverrun.
-	}
+\lstinputlisting{../Examples/memcheck/memchek_example.c}
+
+\begin{lstlisting}
+	==8769== Memcheck, a memory error detector
+	==8769== Copyright (C) 2002-2015, and GNU GPL d, by Julian Seward et al.
+	==8769== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+	==8769== Command: ./memchek_example
+	==8769== 
+	==8769== Invalid read of size 4
+	==8769==    at 0x400559: foo (memchek_example.c:12)
+	==8769==    by 0x40058E: main (memchek_example.c:20)
+	==8769==  Address 0x520403c is 4 bytes before a block of size 40 alloc d
+	==8769==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+	==8769==    by 0x400537: foo (memchek_example.c:8)
+	==8769==    by 0x40058E: main (memchek_example.c:20)
+	==8769== 
+	==8769== Invalid write of size 4
+	==8769==    at 0x400577: foo (memchek_example.c:13)
+	==8769==    by 0x40058E: main (memchek_example.c:20)
+	==8769==  Address 0x5204068 is 0 bytes after a block of size 40 alloc d
+	==8769==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+	==8769==    by 0x400537: foo (memchek_example.c:8)
+	==8769==    by 0x40058E: main (memchek_example.c:20)
+	==8769== 
+	==8769== 
+	==8769== HEAP SUMMARY:
+	==8769==     in use at exit: 40 bytes in 1 blocks
+	==8769==   total heap usage: 1 allocs, 0 frees, 40 bytes allocated
+	==8769== 
+	==8769== 40 bytes in 1 blocks are definitely lost in loss record 1 of 1
+	==8769==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+	==8769==    by 0x400537: foo (memchek_example.c:8)
+	==8769==    by 0x40058E: main (memchek_example.c:20)
+	==8769== 
+	==8769== LEAK SUMMARY:
+	==8769==    definitely lost: 40 bytes in 1 blocks
+	==8769==    indirectly lost: 0 bytes in 0 blocks
+	==8769==      possibly lost: 0 bytes in 0 blocks
+	==8769==    still reachable: 0 bytes in 0 blocks
+	==8769==         suppressed: 0 bytes in 0 blocks
+	==8769== 
+	==8769== For counts of detected and suppressed errors, rerun with: -v
+	==8769== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
 	
-}	// problem 3 : memory leak -- x not freed
-	
-int main(void)
-{
-	foo();
-	return 0;
-}
 \end{lstlisting}
+
+In der Ausgabe des Programms ist zu erkennen, dass Memcheck in dem Programm, dass zuvor weder vom Compiler bemängelt wurde, noch Fehler während der Ausführung hatte, die fehlerhafte Speichernutzung erkennt.
