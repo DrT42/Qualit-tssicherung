@@ -15,7 +15,7 @@ void big (int r)
 
 int main(void)
 {
-    int n = 3000 * 3000;
+    int n = 8000 * 8000;
 
     int *block = malloc(n * sizeof(int));
 
