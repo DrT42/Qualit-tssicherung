@@ -1,7 +1,7 @@
 \section{Memcheck}
 Memcheck ist das erste und wohl bekannteste Tool, das mit dem Valgrind-Framework ausgeliefert wird. Oft meinen Nutzer wenn sie von Valgrind reden eigentlich dieses Werkzeug. Es dient dazu in mit C und C++ geschriebenen Programmen sogenannte Speicherlecks oder sonstige fehlerhafte Speicherzugriffe aufzudecken. Auch der Zugriff auf noch nicht initialisierte Variablen kann mit diesem Werkzeug erkannt werden.
 
-In großen Programmen kann es schnell vorkommen, dass einmal reservierte Speicherbereiche nicht mehr, oder nur in seltenen Ausnahmefällen nicht mehr frei gegeben werden. Diese Fehler können mit herkömmlichen Debuggern nur schwer bis gar nicht gefunden werden. Oft sind die Speicherlecks auch so klein, dass sie lediglich wenige Bytes pro Minute oder Stunde groß sind. Dies kann in vielen Anwendungen kein Problem sein, bei solchen allerdings, die Tagelang laufen, kann es sein, dass solche Lecks dafür sorgen, dass der benötigte Speicher den zur Verfügung stehenden Speicher überschreitet und es zu Performance-Verlust oder gar Fehlern kommt. Memchek kann in solchen fällen helfen die Ursachen für solche Lecks zu finden und zu beheben.
+In großen Programmen kann es schnell vorkommen, dass einmal reservierte Speicherbereiche nicht mehr, oder nur in seltenen Ausnahmefällen nicht mehr frei gegeben werden. Diese Fehler können mit herkömmlichen Debuggern nur schwer bis gar nicht gefunden werden. Oft sind die Speicherlecks auch so klein, dass sie lediglich wenige Bytes pro Minute oder Stunde groß sind. Dies kann in vielen Anwendungen kein Problem sein, bei solchen allerdings, die Tagelang laufen, kann es sein, dass solche Lecks dafür sorgen, dass der benötigte Speicher den zur Verfügung stehenden Speicher überschreitet und es zu Performance-Verlust oder gar Fehlern kommt. Memcheck kann in solchen fällen helfen die Ursachen für solche Lecks zu finden und zu beheben.
 
 \subsection{Example}
 Das folgende Beispiel zeigt einige typische Fehler im Umgang mit Speicher und wie Memcheck sie ausgibt
@@ -53,3 +53,12 @@ Das folgende Beispiel zeigt einige typische Fehler im Umgang mit Speicher und wi
 \end{lstlisting}
 
 In der Ausgabe des Programms ist zu erkennen, dass Memcheck in dem Programm, dass zuvor weder vom Compiler bemängelt wurde, noch Fehler während der Ausführung hatte, die fehlerhafte Speichernutzung erkennt.
+Zunächst wird in jeder Zeile Links die Prozess-ID angegeben. Die ersten Ausgaben liefern verschiedenen Meta-Daten, wie die Version des Valgrind cores, die Lizenz unter der das Tool veröffentlicht ist und das verwendete Tool, in diesem Fall Memcheck. Darunter wird dann noch das getestete Programm ausgegeben bevor die erkannten Warnungen und Fehlermeldungen ausgegeben werden. 
+
+Aus den Warnungen und Fehlermeldung geht hervor, dass Memcheck alle von uns eingebauten Fehler erkannt hat. Zunächst wird ein \glqq Invalid read of size 4\grqq  vermeldet. Zudem liefert der darauffolgende Stack Trace Rückschlüsse darauf, an welche Stelle im Quelltext der Fehler verursacht wurde. In unserem Beispiel wird korrekt die Zeile angegeben in der wir auf einen nicht allokierten Speicherbereich zugreifen wollen. Ebenso wird das schreiben in einen nicht allokierten Speicherbereich erkannt. Zum Schluss in der "Heap Summary" sehen wir auch, das wir vergessen haben einen 40 Bytes großen Speicherbereich freizugeben durch die Ausgabe "40 bytes in 1 blocks are definitely lost in loss record 1 of 1". Diese wir nochmals in der darauffolgenden "Leak Summary" für uns zusammengefasst.
+
+\section{Helgrind}
+Mit Helgrind wird ein Tool angeboten, welches Fehler bei 
+
+\section{Nulgrind}
+Nulgrind ist ein Tool, welches nur zum debugging und testen von den Entwicklern selbst genutzt wird. Es hat keinen weiteren Nutzen und verlangsamt die Lauftzeit der damit ausgeführten Programmen etwa um den Faktor 5. (Quelle: http://valgrind.org/docs/manual/nl-manual.html)
