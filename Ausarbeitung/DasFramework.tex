@@ -1,2 +1,5 @@
-\section{Das Framework}
-Valgrind ist ein Framework zur Erstellung von Werkzeugen um Programme dynamisch zu analysieren. Im Folgenden wird kurz dargestellt wie das Framework aufgebaut ist und wie man damit Werkzeuge bauen kann.
+\section{Der Aufbau des Frameworks}
+Valgrind besteht zum einen aus dem Valgrind core, welcher die essentiellen Bestandteile zum überwachten Ausführen von Programmen bereitstellt und zum anderen aus verschiedenen sogenannten Skins, welche mit dem core über ein Interface interagieren und einer speziellen Aufgabe dienen, wie beispielsweise dem überprüfen des Speichers. Diese Skins können den speziellen Anwendungsfällen angepasst und erweitert werden. Die etablierten Standard Skins die öffentlich zur Verfügung stehen umfassen die so genannten Tools Memecheck, Addcheck, Chachegrind, Helgrind und Nulgrind.
+
+\subsection{Der Core}
+Der Core von Valgrind liest executables eines zu untersuchenden Programms ein und führt diese auf einer virtuellen x86 CPU aus. Ein JIT Compiler annotiert dann jede Anweisung mit weiteren Befehlenführt dabei jede einzelne Anweisung aus und simuliert sie. Für die meisten skinns ist es dabei wichtig, dass beim kompilieren debugg Informationen mitgegeben werden, da diese von den Valgrind Tools ausgelesen und verwendet werden.

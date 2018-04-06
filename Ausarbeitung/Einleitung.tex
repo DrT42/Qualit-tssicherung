@@ -1,0 +1,11 @@
+\section{Einführung}
+Bei der Erstellung komplexerer C und C++ Programme entstehen meist unweigerliche menschliche Fehler und Bugs. Es ist leicht passiert, dass der Programmierer vergisst, ein dynamisch allokierten Speicherbereich frei zu geben oder bei einem mutlithread Programm ein ungewollter Deadlock entsteht. Diese Fehler sind sehr kritisch und führen meist zum Absturz des Programms. Das manuelle debuggen dieser Art der Fehler stellt sich oft schwierig dar und ist nicht immer mit dem bloßem Auge zu erkennen. Was also nun? Hierfür soll das Framework Valgrind Abhilfe schaffen. Ursprünglich als Memory Checker, 2002 veröffentlich, ist Valgrind heute ein Meta-Tool zur Erstellung von Überwachungsprogrammen für C und C++ Programme.
+
+\subsection{Anwendung in der Qualitätssicherung}
+Da Speicherlecks, Race-Conditions und ähnliches keine Warnings im Compiler erzeugen und nur sehr selten zu einem Fehler führen, ist es wichtig diese automatisch zu erkennen. 
+
+Mit den Werkzeugen der Valgrind-Suite werden solche Fehler automatisch gefunden. Dies erspart Zeit, die sonst durch manuelle Prüfung und Kontrollen verloren ginge. Auch können so schnell die Ursachen für Fehler gefunden werden, die zum Beispiel nur in einem von Tausend Durchläufen oder noch seltener auftreten.
+
+Da Valgrind nur über die Konsole gesteuert wird, lassen sich besonders einfach Scripte verwenden mit denen ein automatischer Testablauf auf einem Testserver gestaltet werden kann. So eingesetzt, kann mit Hilfe der Werkzeuge der Valgrind-Suite stets sichergestellt werden, dass Neuerungen im Programm zu keinen Speicherlecks oder Race-Conditions geführt haben. 
+
+Auch die Optimierung von Code kann durch Werkzeuge wie Cachegrind erleichtert werden, da hier besonders ineffiziente Speicherzugriffe erkannt werden können. Dies ist insbesondere bei der Entwicklung für eingebettete Systeme wichtig, die hier oft nicht genügend Rechenleistung zur Verfügung steht um teure Cache-Misses zu kaschieren. 
