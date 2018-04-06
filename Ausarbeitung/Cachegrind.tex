@@ -6,4 +6,60 @@ Die erste Cache-Ebene wird simuliert, um Stellen aufzudecken an denen der Code s
 Cachegrind bietet zusätzlich noch die Möglichkeit, Fehler bei Sprungvorhersagen zu ermitteln. Dazu muss das Programm mit dem Parameter --branch-sim=yes gestartet werden. Oft kann eine häufig falsche Sprungvorhersage durch einfache Umstrukturierungen des Quelltextes behoben werden, was die Performance des Programms verbessert. Dies ist insbesondere für Programme auf eingebetteten Geräten eine nützliche Optimierung, da die Sprungvorhersage auf kleinen Prozessoren im Gegensatz zu der auf Desktop-Prozessoren nur sehr einfach gehalten ist.
 
 \subsection{Beispiel}
-Im folgenden Beispiel werden zwei Programme gezeigt. Beide Programme legen eine 1000 mal 1000 große Matrix von ganzzahligen Werten an und initialisieren bis zu einem Zehntel der Werte
+Im folgenden Beispiel werden zwei Programme gezeigt. Beide Programme legen eine 1000 mal 1000 große Matrix von ganzzahligen Werten an und initialisieren bis zu einem Zehntel der Werte. Das erste Programm initialisiert hierbei linear das erste Zehntel des allozierten Speichers mit Zufallszahlen. Das Zweite Programm initialisiert die Felder mit dem Index der Zufallszahl mit selbiger.
+
+Lässt man Cachegrind die beiden Programme analysieren, so ist festzustellen, dass das Programm mit den zufälligen Zugriffen deutlich mehr Cache-Misses hervorbringt, als das mit dem linearen Zugriffen.
+ 
+\begin{singlespace}
+\begin{scriptsize}
+\begin{lstlisting}
+==5722== I   refs:      10,385,454
+==5722== I1  misses:           780
+==5722== LLi misses:           767
+==5722== I1  miss rate:       0.00%
+==5722== LLi miss rate:       0.00%
+==5722== 
+==5722== D   refs:       6,181,862  (4,065,234 rd   + 2,116,628 wr)
+==5722== D1  misses:       101,300  (    1,930 rd   +    99,370 wr)
+==5722== LLd misses:        60,700  (    1,611 rd   +    59,089 wr)
+==5722== D1  miss rate:        1.6% (      0.0%     +       4.6%  )
+==5722== LLd miss rate:        0.9% (      0.0%     +       2.7%  )
+==5722== 
+==5722== LL refs:          102,080  (    2,710 rd   +    99,370 wr)
+==5722== LL misses:         61,467  (    2,378 rd   +    59,089 wr)
+==5722== LL miss rate:         0.3% (      0.0%     +       2.7%  )
+\end{lstlisting}
+\end{scriptsize}
+\end{singlespace}
+
+In der obigen Ausgabe ist des Programms Cachegrind sind die Cache-Statistiken für das Programm mit den zufälligen Speicherzugriffen dargestellt. In den Zeilen 1 bis 5 sind die Zugriffe auf den Befehlscache angezeigt. Da das Beispielprogramm einen linearen Programmablauf hat, sind hier die Misses wie zu erwarten vernachlässigbar gering. In Zeile 1 wird dabei angezeigt, wie viele Instruktionen insgesamt ausgeführt wurden. In der zweiten Zeile sind die Misses im Level1 Cache aufgeführt, in Zeile 3 die im letzten Cache. Anschließend wird die prozentuale Fehlerrate für bei Caches angegeben. Ist hier eine größere Prozentzahl angegeben, so ist dies ein Indiz dafür, dass im Verlauf des Programms viele unerwartete Sprünge stattfinden, die es zu vermeiden gilt.
+
+In den Zeilen 7 bis 11 sind die Statistiken für den Zugriff auf Daten angegeben. Diese sind analog zu den bereits erläuterten Statistiken des Befehls-Caches aufgebaut. Da Nutzdaten allerdings auch geschrieben werden können ist nach der Gesamtstatistik jeweils noch eine Aufteilung auf Lese- und Schreiboperationen gegeben. Hier kann man deutlich die geringere Größe des Level 1 Caches erkennen, da hier die Fehlerrate fast doppelt so hoch ist, wie im Cache des höchsten Levels.
+
+Zuletzt wird in den Zeilen 13 bis 14 noch die Statistik für den Cache des höchsten Levels angegeben. Auch hier werden die Werte für die Gesamtzahl der Cachezugriffe und die Anzahl der Misses, sowie die sich daraus ergebende Fehlerrate angegeben. 
+
+ Durch immer größer werdende Caches und ein immer besseres Management der Caches, sind die Fehlerraten des Beipielprogramms relativ gering, was auch an dem verhältnismäßig kleinen Speicherbereich liegt, der in dem Beispiel verwendet wurde.
+ 
+ \begin{singlespace}
+ \begin{scriptsize}
+ \begin{lstlisting}
+ ==5965== I   refs:      10,185,455
+ ==5965== I1  misses:           780
+ ==5965== LLi misses:           766
+ ==5965== I1  miss rate:       0.00%
+ ==5965== LLi miss rate:       0.00%
+ ==5965== 
+ ==5965== D   refs:       6,081,859  (3,965,231 rd   + 2,116,628 wr)
+ ==5965== D1  misses:         8,370  (    1,930 rd   +     6,440 wr)
+ ==5965== LLd misses:         7,907  (    1,495 rd   +     6,412 wr)
+ ==5965== D1  miss rate:        0.1% (      0.0%     +       0.3%  )
+ ==5965== LLd miss rate:        0.1% (      0.0%     +       0.3%  )
+ ==5965== 
+ ==5965== LL refs:            9,150  (    2,710 rd   +     6,440 wr)
+ ==5965== LL misses:          8,673  (    2,261 rd   +     6,412 wr)
+ ==5965== LL miss rate:         0.0% (      0.0%     +       0.3%  )
+ \end{lstlisting}
+ \end{scriptsize}
+ \end{singlespace}
+ 
+ Vergleicht man sie jedoch mit dem Beispiel in dem linear auf den Speicher zugegriffen wurde, so sind sie jedoch um Größenordnungen größer.

@@ -1,11 +1,12 @@
 \section{Memcheck}
 Memcheck ist das erste und wohl bekannteste Tool, das mit dem Valgrind-Framework ausgeliefert wird. Oft meinen Nutzer wenn sie von Valgrind reden eigentlich dieses Werkzeug. Es dient dazu in mit C und C++ geschriebenen Programmen sogenannte Speicherlecks oder sonstige fehlerhafte Speicherzugriffe aufzudecken. Auch der Zugriff auf noch nicht initialisierte Variablen kann mit diesem Werkzeug erkannt werden.
 
-In großen Programmen kann es schnell vorkommen, dass einmal reservierte Speicherbereiche nicht mehr, oder nur in seltenen Ausnahmefällen nicht mehr frei gegeben werden. Diese Fehler können mit herkömmlichen Debuggern nur schwer bis gar nicht gefunden werden. Oft sind die Speicherlecks auch so klein, dass sie lediglich wenige Bytes pro Minute oder Stunde groß sind. Dies kann in vielen Anwendungen kein Problem sein, bei solchen allerdings, die Tagelang laufen, kann es sein, dass solche Lecks dafür sorgen, dass der benötigte Speicher den zur Verfügung stehenden Speicher überschreitet und es zu Performance-Verlust oder gar Fehlern kommt. Memcheck kann in solchen fällen helfen die Ursachen für solche Lecks zu finden und zu beheben.
+In großen Programmen kann es schnell vorkommen, dass einmal reservierte Speicherbereiche nicht mehr, oder nur in seltenen Ausnahmefällen nicht mehr frei gegeben werden. Diese Fehler können mit herkömmlichen Debuggern nur schwer bis gar nicht gefunden werden. Oft sind die Speicherlecks auch so klein, dass sie lediglich wenige Bytes pro Minute oder Stunde groß sind. Dies kann in vielen Anwendungen kein Problem sein, bei solchen allerdings, die Tagelang laufen, kann es sein, dass solche Lecks dafür sorgen, dass der benötigte Speicher den zur Verfügung stehenden Speicher überschreitet und es zu Performance-Verlust oder gar Fehlern kommt. Memcheck kann in solchen fällen helfen die Ursachen für\onehalfspacing solche Lecks zu finden und zu beheben.
 
-\subsection{Example}
+\subsection{Beispiels}
 Das folgende Beispiel zeigt einige typische Fehler im Umgang mit Speicher und wie Memcheck sie ausgibt
-
+\begin{singlespace}
+\begin{scriptsize}
 \lstinputlisting{../Examples/memcheck/memchek_example.c}
 
 \begin{lstlisting}
@@ -51,6 +52,8 @@ Das folgende Beispiel zeigt einige typische Fehler im Umgang mit Speicher und wi
 	==8769== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
 	
 \end{lstlisting}
+\end{scriptsize}
+\end{singlespace}
 
 In der Ausgabe des Programms ist zu erkennen, dass Memcheck in dem Programm, dass zuvor weder vom Compiler bemängelt wurde, noch Fehler während der Ausführung hatte, die fehlerhafte Speichernutzung erkennt.
 Zunächst wird in jeder Zeile Links die Prozess-ID angegeben. Die ersten Ausgaben liefern verschiedenen Meta-Daten, wie die Version des Valgrind cores, die Lizenz unter der das Tool veröffentlicht ist und das verwendete Tool, in diesem Fall Memcheck. Darunter wird dann noch das getestete Programm ausgegeben bevor die erkannten Warnungen und Fehlermeldungen ausgegeben werden. 
