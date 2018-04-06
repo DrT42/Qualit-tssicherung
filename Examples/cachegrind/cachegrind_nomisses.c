@@ -20,14 +20,14 @@ int main(void)
     int *block = malloc(n * sizeof(int));
 	int i;
     for (i = 0; i < n / 10; i++) {
-         //int ri = rand() % n;
-         block[(rand() % n)] = 0;
+		int ri = rand();
+         block[i] = ri;
     }
 
 	//for (i = 0; i<10; i++)
 	//{
 		//int r = rand()%10;
-		//if (r < 5)
+		//if (i%2)
 			//small(r);
 		//else
 			//big(r);
