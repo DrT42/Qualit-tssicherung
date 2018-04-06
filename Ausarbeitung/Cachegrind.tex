@@ -1,0 +1,4 @@
+\section{Cachegrind}
+Cachegrind ist ein Werkzeug, um zu ermitteln, wie effizient Speicherzugriffe erfolgen. Dabei simuliert das Werkzeug, egal wie viele Cache-Ebenen es gibt, lediglich zwei Cache-Ebenen. Die erste und die letzte Cache-Ebene. In der ersten Ebene werden dabei ein getrennter Instruktions- und Datencache simuliert, während die letzte Cache-Ebene ein vereinheitlichter Cache ist.
+
+Die erste Cache-Ebene wird simuliert, um Stellen aufzudecken an denen der Code schlecht mit der Architektur des Caches interagiert aufzudecken. Dies kann zum Beispiel sein, wenn auf eine Matrix, die Zeilenweise im Speicher liegt, spaltenweise zugegriffen wird. Der letzte Level des Caches wird deshalb abgebildet, weil er den Zugriff auf den Hauptspeicher puffert und bei einem Miss direkt aus diesem gelesen werden muss. Misses sind hier daher besonders teuer. 
