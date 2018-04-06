@@ -3,3 +3,9 @@ Valgrind besteht zum einen aus dem Valgrind core, welcher die essentiellen Besta
 
 \subsection{Der Core}
 Der Core von Valgrind liest executables eines zu untersuchenden Programms ein und führt diese auf einer virtuellen x86 CPU aus. Ein JIT Compiler annotiert dann jede Anweisung mit weiteren Befehlen und führt dabei jede einzelne Anweisung aus und simuliert sie. Für die meisten Skins ist es dabei wichtig, dass beim kompilieren debugg Informationen mitgegeben werden, da diese von den Valgrind Tools ausgelesen und verwendet werden. Dadurch wird die dynamische Analyse des Programmverhaltens ermöglicht, im Gegensatz zu statischen Analysen, welche meist lediglich anhand des Quelltext versuchen Fehler zu ermitteln. (Quelle: Heise.de)
+
+Durch dieses Verfahren ergibt sich der Vorteil, dass der gesamte Code des Programms samt aller benutzten Bibliotheken überwacht werden kann, ohne den Quelltext zu benötigen.
+Ebenso müssen auch die zu überwachenden Programme nicht neu Kompiliert oder neu Gelinkt werden.
+(Quelle: https://ac.els-cdn.com/S1571066104810429/1-s2.0-S1571066104810429-main.pdf?_tid=2c524dd2-9154-483d-beb8-eb8870e77c9b&acdnat=1523010238_331a79a4a87e41d4b4de34111d1caf7f)
+
+Obwhol Valgrind hauptsächlich zur Überwachung von C/C++ Programmen eingesetzt wird, findet es auch in anderen Bereichen Anwendung. In Java wird die Speicherverwaltung zwar schon durch den integrierten Grabadge Collector vereinfacht, doch dennoch kann Valgrind auch Java Progrmmieren helfen Fehler, wie sie beispielsweise bei der Multithread programmieren entstehen können, ausfindig zu machen. Dazu ist Valgrind inder der Lage, da es so konzipiert ist, dass es kompilierten Programmcode aus beliebigen Sprachen verarbeiten kann.
