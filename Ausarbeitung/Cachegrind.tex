@@ -2,3 +2,8 @@
 Cachegrind ist ein Werkzeug, um zu ermitteln, wie effizient Speicherzugriffe erfolgen. Dabei simuliert das Werkzeug, egal wie viele Cache-Ebenen es gibt, lediglich zwei Cache-Ebenen. Die erste und die letzte Cache-Ebene. In der ersten Ebene werden dabei ein getrennter Instruktions- und Datencache simuliert, während die letzte Cache-Ebene ein vereinheitlichter Cache ist.
 
 Die erste Cache-Ebene wird simuliert, um Stellen aufzudecken an denen der Code schlecht mit der Architektur des Caches interagiert aufzudecken. Dies kann zum Beispiel sein, wenn auf eine Matrix, die Zeilenweise im Speicher liegt, spaltenweise zugegriffen wird. Der letzte Level des Caches wird deshalb abgebildet, weil er den Zugriff auf den Hauptspeicher puffert und bei einem Miss direkt aus diesem gelesen werden muss. Misses sind hier daher besonders teuer. 
+
+Cachegrind bietet zusätzlich noch die Möglichkeit, Fehler bei Sprungvorhersagen zu ermitteln. Dazu muss das Programm mit dem Parameter --branch-sim=yes gestartet werden. Oft kann eine häufig falsche Sprungvorhersage durch einfache Umstrukturierungen des Quelltextes behoben werden, was die Performance des Programms verbessert. Dies ist insbesondere für Programme auf eingebetteten Geräten eine nützliche Optimierung, da die Sprungvorhersage auf kleinen Prozessoren im Gegensatz zu der auf Desktop-Prozessoren nur sehr einfach gehalten ist.
+
+\subsection{Beispiel}
+Im folgenden Beispiel werden zwei Programme gezeigt. Beide Programme legen eine 1000 mal 1000 große Matrix von ganzzahligen Werten an und initialisieren bis zu einem Zehntel der Werte
