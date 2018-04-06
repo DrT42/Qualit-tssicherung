@@ -15,22 +15,23 @@ void big (int r)
 
 int main(void)
 {
-    int n = 8000 * 8000;
+    int n = 1000 * 1000;
 
     int *block = malloc(n * sizeof(int));
 	int i;
     for (i = 0; i < n / 10; i++) {
-         block[i*100] = 0;
+		int ri = rand();
+         block[i] = ri;
     }
 
-	for (i = 0; i<10; i++)
-	{
-		int r = rand()%10;
-		if (i%2)
-			small(r);
-		else
-			big(r);
-	}
+	//for (i = 0; i<10; i++)
+	//{
+		//int r = rand()%10;
+		//if (i%2)
+			//small(r);
+		//else
+			//big(r);
+	//}
 	free(block);
     return 0;
 }
