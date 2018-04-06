@@ -1,8 +1,12 @@
+#include <iostream>
+#include <vector>
+#include <thread>
+
 class Ship
 {
     int m_Containers;
 public:
-    Wallet() :m_Containers(0){}
+    Ship() :m_Containers(0){}
 	
     int getContainers() 
 	{ 
@@ -26,7 +30,7 @@ int loadShip()
         threads.push_back(std::thread(&Ship::loadContainers, &blackPearl, 1000));
    }
  
-   for(int i = 0; i < threads.size() ; i++)
+   for(unsigned int i = 0; i < threads.size() ; i++)
    {
        threads.at(i).join();
    }
@@ -37,12 +41,12 @@ int main()
 {
  
   int val = 0;
-  for(int k = 0; k < 1000; k++)
+//  for(int k = 0; k < 1000; k++)
   {
-	  val = loadContainers();
+	  val = loadShip();
      if(val != 5000)
      {
-       std::cout << "Error at count = "<<k<<": Containers on ship = "<<val << std::endl;
+       std::cout << "Error at count = 1: Containers on ship = "<<val << std::endl;
      }
   }
   return 0;
