@@ -62,4 +62,13 @@ Zuletzt wird in den Zeilen 13 bis 14 noch die Statistik für den Cache des höch
  \end{scriptsize}
  \end{singlespace}
  
- Vergleicht man sie jedoch mit dem Beispiel in dem linear auf den Speicher zugegriffen wurde, so sind sie jedoch um Größenordnungen größer.
+ Vergleicht man sie jedoch mit dem Beispiel in dem linear auf den Speicher zugegriffen wurde, so sind sie jedoch um Größenordnungen größer. Was in dem Beispiel noch als vernachlässigend gering erscheint, kann im allt"aglichen Gebrauch jedoch den Unterschied ausmachen, ob das Programm parallel zu anderen Programmen ausgeführt werden kann oder nicht.
+ 
+ \begin{singlespace}
+ \begin{scriptsize}
+ \lstinputlisting{../Examples/cachegrind/cachegrind_example.c}
+ \end{scriptsize}
+ \end{singlespace}
+ 
+ \section{Callgrind}
+ Das Tool Callgrind ist eine Erweiterung des Tools Cachegrind. Neben der Funktionalit"at von Cachegrind erstellt es zus"atzlich einen Graphen, der zeigt, wie sich die Funktionen des Programms gegenseitig Aufrufen. Dies kann zum einen die Suche nach Misses im Befehls-Cache erleichtern. Zum anderen kann man so prüfen ob die gewünschte Architektur eingehalten wurde und eventuell ungewollte Abhängigkeiten erkennen und auflösen.

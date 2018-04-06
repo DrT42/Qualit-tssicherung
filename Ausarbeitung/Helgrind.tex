@@ -1,0 +1,44 @@
+\section{Helgrind}
+Mit Helgrind wird ein Tool angeboten, welches den Programmierer beim programmieren von Multithread Programmen unterst"utzen soll. Es erkennt m"ogliche Deadlocks und Race-conditions. Ebenfalls wird auf eine falsche Verwendungen der POSIX pthreads API hingewiesen, sollte beispielsweise versucht werden, ein nicht gelocktes Mutex freizugeben.
+
+Wenn Threads sich gegenseitig beeinflussen, kann es selten unter ung"unstigen Umst"anden zu einer gegenseitigen Beeinflussung kommen. Diese Fehler k"onnen so selten auftreten, dass sie mit etwas Pech beim Testen des Programms nicht gefunden werden. Mit Helgrind bietet die Valgrind-Suite ein Tool, dass solche Race-Conditions erkennt.
+
+\subsection{Beispiel}
+Im folgenden Beispielprogramm wird eine solche Race-Condition erschaffen. Das Programm selbst kann ohne Warnungen des Compilers gebaut werden und funktionierte bei einigen manuellen Test stets fehlerfrei.
+\begin{singlespace}
+\begin{scriptsize}
+\lstinputlisting{../Examples/helgrind/dataRace.cpp}
+
+\begin{lstlisting}
+==2937== Possible data race during write of size 4 at 0xBEC690D4 by thread #3
+==2937== Locks held: none
+==2937==    at 0x8049060: Ship::loadContainers(int) (dataRace.cpp:20)
+==2937==    by 0x804AA91: void std::_Mem_fn<void (Ship::*)(int)>::operator()<int, void>(Ship*, int&&) const (in /home/tobias/Qualit-tssicherung/Examples/helgrind/dataRace)
+==2937==    by 0x804AA06: void std::_Bind_simple<std::_Mem_fn<void (Ship::*)(int)> (Ship*, int)>::_M_invoke<0u, 1u>(std::_Index_tuple<0u, 1u>) (functional:1732)
+==2937==    by 0x804A908: std::_Bind_simple<std::_Mem_fn<void (Ship::*)(int)> (Ship*, int)>::operator()() (functional:1720)
+==2937==    by 0x804A8BD: std::thread::_Impl<std::_Bind_simple<std::_Mem_fn<void (Ship::*)(int)> (Ship*, int)> >::_M_run() (thread:115)
+==2937==    by 0x40F5D1D: ??? (in /usr/lib/i386-linux-gnu/libstdc++.so.6.0.19)
+==2937==    by 0x402E661: ??? (in /usr/lib/valgrind/vgpreload_helgrind-x86-linux.so)
+==2937==    by 0x402E661: ??? (in /usr/lib/valgrind/vgpreload_helgrind-x86-linux.so)
+==2937==    by 0x415DF71: start_thread (pthread_create.c:312)
+==2937==    by 0x426243D: clone (clone.S:129)
+==2937== 
+==2937== This conflicts with a previous write of size 4 by thread #2
+==2937== Locks held: none
+==2937==    at 0x8049060: Ship::loadContainers(int) (dataRace.cpp:20)
+==2937==    by 0x804AA91: void std::_Mem_fn<void (Ship::*)(int)>::operator()<int, void>(Ship*, int&&) const (in /home/tobias/Qualit-tssicherung/Examples/helgrind/dataRace)
+==2937==    by 0x804AA06: void std::_Bind_simple<std::_Mem_fn<void (Ship::*)(int)> (Ship*, int)>::_M_invoke<0u, 1u>(std::_Index_tuple<0u, 1u>) (functional:1732)
+==2937==    by 0x804A908: std::_Bind_simple<std::_Mem_fn<void (Ship::*)(int)> (Ship*, int)>::operator()() (functional:1720)
+==2937==    by 0x804A8BD: std::thread::_Impl<std::_Bind_simple<std::_Mem_fn<void (Ship::*)(int)> (Ship*, int)> >::_M_run() (thread:115)
+==2937==    by 0x40F5D1D: ??? (in /usr/lib/i386-linux-gnu/libstdc++.so.6.0.19)
+==2937==    by 0x402E661: ??? (in /usr/lib/valgrind/vgpreload_helgrind-x86-linux.so)
+==2937==    by 0x402E661: ??? (in /usr/lib/valgrind/vgpreload_helgrind-x86-linux.so)
+==2937==  Address 0xbec690d4 is on thread #1's stack
+==2937==  in frame #6, created by loadShip() (dataRace.cpp:26)
+
+\end{lstlisting}
+\end{scriptsize}
+\end{singlespace}
+
+Das Tool Helgrind stellt allerdings Race-Conditions in nur einem Durchlauf sicher fest. Oben ist ein Auszug aus der Ausgabe zu sehen, in dem Helgrind die m"ogliche Race-Condition zwischen zwei der Threads angibt. F"ur die Race-Conditions mit den anderen Threads wurde jeweils eine "ahnliche Ausgabe erzeugt.
+Die ausf"uhrlichen Callstacks helfen bei groﬂen Programmen, den zusammenhang zwischen den Threads aufzul"osen und erm"oglichen es dem Nutzer die Race-Condition nachzuvollziehen.

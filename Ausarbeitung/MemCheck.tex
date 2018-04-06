@@ -60,10 +60,5 @@ Zunächst wird in jeder Zeile Links die Prozess-ID angegeben. Die ersten Ausgabe
 
 Aus den Warnungen und Fehlermeldung geht hervor, dass Memcheck alle von uns eingebauten Fehler erkannt hat. Zunächst wird ein \glqq Invalid read of size 4\grqq  vermeldet. Zudem liefert der darauffolgende Stack Trace Rückschlüsse darauf, an welche Stelle im Quelltext der Fehler verursacht wurde. In unserem Beispiel wird korrekt die Zeile angegeben in der wir auf einen nicht allokierten Speicherbereich zugreifen wollen. Ebenso wird das schreiben in einen nicht allokierten Speicherbereich erkannt. Zum Schluss in der "Heap Summary" sehen wir auch, das wir vergessen haben einen 40 Bytes großen Speicherbereich freizugeben durch die Ausgabe "40 bytes in 1 blocks are definitely lost in loss record 1 of 1". Diese wir nochmals in der darauffolgenden "Leak Summary" für uns zusammengefasst.
 
-\section{Helgrind}
-Mit Helgrind wird ein Tool angeboten, welches den Programmierer beim programmieren von Multythread Programmen unterstützen soll. Die es erkennt mögliche Deadlocks oder Race-conditions. Ebenfalls wird auf eine falsche Verwendungen der POSIX pthreads API hingewiesen, sollte beispielsweise versucht werden, ein nicht gelocktes Mutex freizugeben.
-(Quelle: http://valgrind.org/docs/manual/hg-manual.html)
-Es Folgt ein Beispiel:
-
 \section{Nulgrind}
 Nulgrind ist ein Tool, welches nur zum debugging und testen von den Entwicklern selbst genutzt wird. Es hat keinen weiteren Nutzen und verlangsamt die Lauftzeit der damit ausgeführten Programmen etwa um den Faktor 5. (Quelle: http://valgrind.org/docs/manual/nl-manual.html)
